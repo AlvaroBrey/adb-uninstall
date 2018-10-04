@@ -11,12 +11,12 @@ fi
 
 if [[ "$DEVICECOUNT" -gt 1 ]]
 then
-    SERIAL=$(adb devices -l | sed '1d' | head -n -1 \
+    SERIAL=$(adb devices -l | sed '1d' | sed '$ d' \
     | fzf --reverse --prompt "Select device: " --height=5 \
     | cut -f 1 -d ' ' \
     )
 else
-    SERIAL=$(adb devices -l | sed '1d' | head -n -1 | cut -f 1 -d ' ')
+    SERIAL=$(adb devices -l | sed '1d' | sed '$ d' | cut -f 1 -d ' ')
 fi
 
 PACKAGES=$(adb -s "$SERIAL" shell pm list packages -3 | cut -d ':' -f 2 | sort \
