@@ -29,7 +29,7 @@ if [[ ! -z "$PACKAGES" ]]; then
     echo "Selected packages: "
     echo "$PACKAGES"
     read -r -p "Confirm uninstall? [Y/n]" response
-    response=${response,,} # tolower
+    response=$(echo "$response" | tr '[:upper:]' '[:lower:]') # tolower
     if [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ]; then
         echo "$PACKAGES" | xargs -I % adb -s "$SERIAL"  shell pm uninstall "%"
     fi
