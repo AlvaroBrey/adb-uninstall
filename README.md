@@ -28,4 +28,4 @@ The script will show you the selected packages and will prompt for confirmation.
 
 ## License
 
-This project is published under the [MIT License](License.txt).
+This project is published under the [MIT License](LICENSE.txt).
