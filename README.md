@@ -2,7 +2,7 @@
 
 This is a bash script that uses [`fzf`](https://github.com/junegunn/fzf) to let you easily uninstall multiple apps over [ADB](https://developer.android.com/studio/command-line/adb).
 
-![Main screen](res/main.png)
+![Demo GIF](res/demo.gif)
 
 ## Features
 
