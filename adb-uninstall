@@ -26,7 +26,8 @@ PACKAGES=$(adb -s "$SERIAL" shell pm list packages -3 | cut -d ':' -f 2 | sort \
 )
 
 if [[ ! -z "$PACKAGES" ]]; then
-    echo "Selected packages: "
+    PACKAGES_LIST=$(echo "$PACKAGES" | tr ' ' '\n')
+    echo "Selected packages ($(echo "${PACKAGES_LIST}" | wc -l)):"
     echo "$PACKAGES"
     read -r -p "Confirm uninstall? [Y/n]" response
     response=$(echo "$response" | tr '[:upper:]' '[:lower:]') # tolower
