@@ -22,7 +22,7 @@ fi
 PACKAGES=$(adb -s "$SERIAL" shell pm list packages -3 | cut -d ':' -f 2 | sort \
     | fzf --reverse --multi \
     --preview-window right:40% \
-    --preview "echo {} | xargs -I % curl -s -o- \"https://play.google.com/store/apps/details?id=%\" |  grep -oh '<meta itemprop=\"name\" content=\"[^<]*\"' | cut -d = -f 3 | tr -d '\"'" \
+    --preview "echo {} | xargs -I % curl -s -o- \"https://play.google.com/store/apps/details?id=%\" |  grep -oh '<title id=\"main-title\">.*</title>'  | cut -d '>' -f 2 | cut -d '<' -f 1 | rev | cut -d '-' -f2- | rev" \
 )
 
 if [[ ! -z "$PACKAGES" ]]; then
