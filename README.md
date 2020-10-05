@@ -20,7 +20,7 @@ The default versions probably won't work.
 
 ## Usage
 
-Simply download the script or clone this repository and run `adb-uninstall`.
+Simply [download the script](https://raw.githubusercontent.com/alvarobrey/adb-uninstall/master/adb-uninstall) or clone this repository and run `adb-uninstall`.
 
 Use the directional keys to navigate. Use the <kbd>TAB</kbd> key to select multiple packages if you so wish, and then press <kbd>ENTER</kbd> to proceed.
 
