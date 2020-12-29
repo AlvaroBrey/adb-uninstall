@@ -35,7 +35,9 @@ if [[ ! -z "$PACKAGES" ]]; then
         for package in $PACKAGES_LIST
         do
             echo -n "$package - "
-            adb -s "$SERIAL"  shell pm uninstall "$package"
+            adb -s "$SERIAL" shell pm uninstall "$package" ||
+              read -r -p "Uninstallation failed. Try to uninstall as the android user? [Y/n]" response
+            [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ] && adb -s "$SERIAL"  shell pm uninstall --user 0 "$package"
         done
     fi
 else
