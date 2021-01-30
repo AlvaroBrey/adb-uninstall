@@ -13,14 +13,12 @@ function parse_response(){
     fi
 }
 
-if [[ "$DEVICECOUNT" -eq 0 ]]
-then
+if [[ "$DEVICECOUNT" -eq 0 ]]; then
     echo "No ADB devices connected."
     exit 1
 fi
 
-if [[ "$DEVICECOUNT" -gt 1 ]]
-then
+if [[ "$DEVICECOUNT" -gt 1 ]]; then
     SERIAL=$(adb devices -l | sed '1d' | head -n -1 \
     | fzf --reverse --prompt "Select device: " --height=5 \
     | cut -f 1 -d ' ' \
