@@ -3,6 +3,7 @@ set -euo pipefail
 
 DEVICECOUNT=$(echo "$(adb devices | wc -l) - 2" | bc)
 
+
 if [[ "$DEVICECOUNT" -eq 0 ]]
 then
     echo "No ADB devices connected."
@@ -35,9 +36,14 @@ if [[ ! -z "$PACKAGES" ]]; then
         for package in $PACKAGES_LIST
         do
             echo -n "$package - "
-            adb -s "$SERIAL" shell pm uninstall "$package" ||
-              read -r -p "Uninstallation failed. Try to uninstall as the android user? [Y/n]" response
-            [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ] && adb -s "$SERIAL"  shell pm uninstall --user 0 "$package"
+            adb -s "$SERIAL" shell pm uninstall "$package"
+            if [ $? -ne 0 ]; then
+                read -r -p "Uninstallation failed. Try to uninstall as the android user? [Y/n]" response
+                response=$(echo "$response" | tr '[:upper:]' '[:lower:]') # tolower
+                if [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ]; then
+                    adb -s "$SERIAL"  shell pm uninstall --user 0 "$package"
+                fi
+            fi
         done
     fi
 else
