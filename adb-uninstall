@@ -5,7 +5,8 @@ DEVICECOUNT=$(echo "$(adb devices | wc -l) - 2" | bc)
 
 
 function parse_response(){
-    local response=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    local response
+    response=$(echo "$1" | tr '[:upper:]' '[:lower:]')
     if [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ]; then
         echo 0
     else
@@ -42,10 +43,8 @@ if [[ ! -z "$PACKAGES" ]]; then
         for package in $PACKAGES_LIST
         do
             echo -n "$package - "
-            adb -s "$SERIAL" shell pm uninstall "$package"
-            if [ $? -ne 0 ]; then
-                read -r -p "Uninstallation failed. Try to uninstall as the android user? [Y/n]" response
-                if [[ $(parse_response response) -eq 0 ]]; then
+            if ! adb -s "$SERIAL" shell pm uninstall "$package"; then
+                if [[ $(prompt_yn "Uninstallation failed. Try to uninstall as the android user?") -eq 0 ]]; then
                     adb -s "$SERIAL"  shell pm uninstall --user 0 "$package"
                 fi
             fi
