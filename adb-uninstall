@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 set -euo pipefail
 
 DEVICECOUNT=$(echo "$(adb devices | wc -l) - 2" | bc)
@@ -12,6 +13,11 @@ function parse_response(){
     else
         echo 1
     fi
+}
+
+function prompt_yn(){
+    read -r -p "$1 [Y/n]" response
+    echo $(parse_response "$response")
 }
 
 if [[ "$DEVICECOUNT" -eq 0 ]]; then
@@ -38,8 +44,7 @@ if [[ ! -z "$PACKAGES" ]]; then
     PACKAGES_LIST=$(echo "$PACKAGES" | tr ' ' '\n')
     echo "Selected packages ($(echo "${PACKAGES_LIST}" | wc -l)):"
     echo "$PACKAGES"
-    read -r -p "Confirm uninstall? [Y/n]" response
-    if [[ $(parse_response response) -eq 0 ]]; then
+    if [[ $(prompt_yn "Confirm uninstall?") -eq 0 ]]; then
         for package in $PACKAGES_LIST
         do
             echo -n "$package - "
