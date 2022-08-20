@@ -3,20 +3,9 @@ set -euo pipefail
 
 DEVICECOUNT=$(echo "$(adb devices | wc -l) - 2" | bc)
 
-
-function parse_response(){
-    local response
-    response=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-    if [[ "$response" =~ ^(yes|y| ) ]] || [ -z "$response" ]; then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
 function prompt_yn(){
     read -r -p "$1 [Y/n]" response
-    parse_response "$response"
+    [[ ${response,,} =~ ^(yes|y| ) || -z $response ]] && return 0 || return 1
 }
 
 if [[ "$DEVICECOUNT" -eq 0 ]]; then
@@ -43,12 +32,12 @@ if [[ -n "$PACKAGES" ]]; then
     PACKAGES_LIST=$(echo "$PACKAGES" | tr ' ' '\n')
     echo "Selected packages ($(echo "${PACKAGES_LIST}" | wc -l)):"
     echo "$PACKAGES"
-    if [[ $(prompt_yn "Confirm uninstall?") -eq 0 ]]; then
+    if prompt_yn "Confirm uninstall?"; then
         for package in $PACKAGES_LIST
         do
             echo -n "$package - "
             if ! adb -s "$SERIAL" shell pm uninstall "$package"; then
-                if [[ $(prompt_yn "Uninstallation failed. Try to uninstall as the android user?") -eq 0 ]]; then
+                if prompt_yn "Uninstallation failed. Try to uninstall as the android user?"; then
                     adb -s "$SERIAL"  shell pm uninstall --user 0 "$package"
                 fi
             fi
