@@ -16,7 +16,7 @@ function parse_response(){
 
 function prompt_yn(){
     read -r -p "$1 [Y/n]" response
-    echo $(parse_response "$response")
+    parse_response "$response"
 }
 
 if [[ "$DEVICECOUNT" -eq 0 ]]; then
@@ -39,7 +39,7 @@ PACKAGES=$(adb -s "$SERIAL" shell pm list packages -3 | cut -d ':' -f 2 | sort \
     --preview "echo {} | xargs -I % curl -s -o- \"https://play.google.com/store/apps/details?id=%\" |  grep -oh '<title id=\"main-title\">.*</title>'  | cut -d '>' -f 2 | cut -d '<' -f 1 | rev | cut -d '-' -f2- | rev" \
 )
 
-if [[ ! -z "$PACKAGES" ]]; then
+if [[ -n "$PACKAGES" ]]; then
     PACKAGES_LIST=$(echo "$PACKAGES" | tr ' ' '\n')
     echo "Selected packages ($(echo "${PACKAGES_LIST}" | wc -l)):"
     echo "$PACKAGES"
