@@ -1,0 +1,3 @@
+enable=avoid-nullary-conditions
+enable=deprecate-which
+enable=quote-safe-variables
