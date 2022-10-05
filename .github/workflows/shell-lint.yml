@@ -1,0 +1,23 @@
+name: Lint script
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install shellcheck -y
+      - run: shellcheck adb-uninstall
+  shfmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install shfmt
+        run: |
+          wget https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_linux_amd64 -O shfmt
+          chmod +x shfmt
+      - name: Run shfmt
+        run: ./shfmt --diff adb-uninstall
