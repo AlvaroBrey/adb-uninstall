@@ -15,9 +15,6 @@ This is a bash script that uses [`fzf`](https://github.com/junegunn/fzf) to let 
 
 `fzf` and `adb` must be properly installed and configured, and must be present in your `PATH`.
 
-MacOS compatibility: install `sed` and `curl` from Homebrew.
-The default versions probably won't work.
-
 ## Usage
 
 Simply [download the script](https://raw.githubusercontent.com/alvarobrey/adb-uninstall/master/adb-uninstall) or clone this repository and run `adb-uninstall`.
